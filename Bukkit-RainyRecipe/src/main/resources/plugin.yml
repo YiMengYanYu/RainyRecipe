@@ -1,0 +1,4 @@
+name: RainyRecipe
+version: '${version}'
+main: top.rainydrm.BukkitRainyRecipe
+api-version: 1.20
