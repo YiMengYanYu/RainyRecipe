@@ -2,3 +2,26 @@ name: RainyRecipe
 version: '${version}'
 main: top.rainydrm.BukkitRainyRecipe
 api-version: 1.20
+permissions:
+  RainyRecipe.*:
+    description: Rainy配方
+    default: op
+    children:
+      - RainyRecipe.add
+      - RainyRecipe.delete
+      - RainyRecipe.list
+  RainyRecipe.add:
+    description: 添加配方
+    default: op
+  RainyRecipe.delete:
+    description: 删除配方
+    default: op
+  RainyRecipe.list:
+    description: 配方列表
+    default: true
+
+#注册插件需要用到的指令
+commands:
+  RainyRecipe:
+    description: 添加配方命令
+

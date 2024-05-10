@@ -41,13 +41,18 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
+    implementation("com.google.guava:guava:30.1-jre")
+
+    implementation("com.alibaba.fastjson2:fastjson2:2.0.49")
+
+  compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
+  // implementation("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
 }
 tasks.shadowJar {
     archiveBaseName.set("bukkit-RainyRecipe")
 
     archiveClassifier.set("")
-
+    destinationDirectory = file("D:\\java\\server\\plugins")
 }
 
 tasks.test {
@@ -56,7 +61,12 @@ tasks.test {
 kotlin {
     jvmToolchain(11)
 }
-
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+tasks.withType<JavaExec> {
+    systemProperty("file.encoding", "UTF-8")
+}
 tasks.named<ProcessResources>("processResources") {
     filesMatching("plugin.yml") {
         expand(project.properties)
