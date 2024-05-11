@@ -31,7 +31,7 @@ class RecipeUtil {
         three = getBracketContent(str, 3)?.split(",")!!
 
 
-
+        verifyItems()
     }
 
     fun verifyItems() {
@@ -84,16 +84,19 @@ class RecipeUtil {
     private fun setIngredient(shapedRecipe: ShapedRecipe) {
         var count: Int = 1
         one.forEach {
+
             shapedRecipe.setIngredient(count.toString()[0], MaterialMap.getMaterial(it))
             count++
 
         }
         two.forEach {
+
             shapedRecipe.setIngredient(count.toString()[0], MaterialMap.getMaterial(it))
             count++
 
         }
         three.forEach {
+
             shapedRecipe.setIngredient(count.toString()[0], MaterialMap.getMaterial(it))
             count++
 

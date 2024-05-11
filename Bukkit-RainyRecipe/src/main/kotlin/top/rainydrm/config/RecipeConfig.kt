@@ -25,30 +25,36 @@ object RecipeConfig {
     private fun loadRecipe() {
 
         val recipesSection = recipeyml!!.getConfigurationSection("recipes")
-        recipesSection!!.getKeys(false).forEach { recipeKey ->
-            val recipe = recipesSection.getConfigurationSection(recipeKey)
-            val recipeValue = recipe!!.getString("recipe")
-            val item = recipe.getString("item")
-            Bukkit.getLogger().info("正在加载配方: $recipeKey")
-            var   generateRecipe = RecipeUtil(recipeValue!!).generateRecipe(recipeKey, item!!)
-            Bukkit.addRecipe(generateRecipe)
 
+        if (recipesSection!=null){
+            recipesSection.getKeys(false).forEach { recipeKey ->
+                val recipe = recipesSection.getConfigurationSection(recipeKey)
+                val recipeValue = recipe!!.getString("recipe")
+                val item = recipe.getString("item")
+                Bukkit.getLogger().info("正在加载配方: $recipeKey")
+                var   generateRecipe = RecipeUtil(recipeValue!!).generateRecipe(recipeKey, item!!)
+                Bukkit.addRecipe(generateRecipe)
+
+            }
         }
+
+
+
 
 
     }
 
 
     fun setRecipe(recipeName: String, recipe: String, item: String) {
-        Bukkit.getLogger().info("测试测试测试$recipeName $recipe $item")
+
         var map = HashMap<String, String>(4)
         map["recipe"] = recipe
         map["item"] = item
 
         recipeyml!!.set("recipes.$recipeName", map)
         var instance = BukkitRainyRecipe.getInstance()
-        Bukkit.getLogger().info("${instance!!.dataFolder}\\recipe.yml")
-        recipeyml!!.save("${instance.dataFolder}\\recipe.yml")
+
+        recipeyml!!.save("${instance!!.dataFolder}\\recipe.yml")
 
     }
 
