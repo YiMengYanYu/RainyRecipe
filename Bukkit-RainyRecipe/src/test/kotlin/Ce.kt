@@ -10,7 +10,7 @@ class Ce {
 
        // var parse: RecipeUtil = JSON.parseObject("{[石头,,],[,,],[,,]}", RecipeUtil::class.java)
 
-
+        println(1.toString()[0])
 
 
     }

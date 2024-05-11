@@ -1,20 +1,26 @@
 package top.rainydrm.command
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.NamespacedKey
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
+import top.rainydrm.config.RecipeConfig
+import top.rainydrm.util.MaterialMap
+import top.rainydrm.util.RecipeUtil
 import java.util.*
-import kotlin.collections.ArrayList
 
 class RainyRecipeCommand : TabExecutor {
+    /**
+     * 命令提示
+     */
     override fun onTabComplete(
         sender: CommandSender,
         command: Command,
         label: String,
         args: Array<out String>
     ): MutableList<String> {
-
 
         val tips = LinkedList<String>()
         //处理第一个参数
@@ -37,25 +43,109 @@ class RainyRecipeCommand : TabExecutor {
             }
         } else if (args.size == 2) {
 
-            tips.add("{[,,],[,,],[,,]}")
-        }else if (args.size==3){
+            tips.add("配方名称(必须为英文)")
+        } else if (args.size == 3) {
 
+            tips.add("{[,,],[,,],[,,]}")
+            return tips
+
+        } else if (args.size == 4) {
+            tips.addAll(MaterialMap.getKeySet(args[3]))
+
+            return tips
 
         }
-
-
-
 
         return tips
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+
+        if (args.isEmpty()) {
+            Bukkit.getLogger().info("args.isEmpty()")
+            return true
+        }
+
+        if (args[0] == null) {
+            Bukkit.getLogger().info("args[0] == null")
+            return true
+        }
+
+        if (args[0] == "add") {
+            if (!sender.hasPermission("RainyRecipe.add")) {
+                sender.sendMessage("你没有执行命令的权限")
+                return true
+            }
+            if (args.size != 4) {
+                sender.sendMessage("参数错误")
+                return true
+            }
+
+            if (!isValidKey(args[1])) {
+                sender.sendMessage("配方名称不符合要求")
+                return true
+            }
+
+            var namespacedKey = NamespacedKey("rainyrecipe", args[1])
+            if (Bukkit.getRecipe(namespacedKey) != null) {
+
+                sender.sendMessage("这个配方名称已经存在")
+                return true
+            }
+            if (!MaterialMap.existMaterial(args[3])) {
+
+                sender.sendMessage("你要合成的物品不存在或者输入的名称错误")
+                return true
+
+            }
+
+
+            var recipe = try {
+                RecipeUtil(args[2]).generateRecipe(args[1], args[3])
+            } catch (e: Exception) {
+                sender.sendMessage(e.message)
+               return true
+            }
+
+
+            Bukkit.addRecipe(recipe)
+            RecipeConfig.setRecipe(args[1], args[2], args[3])
+
+            sender.sendMessage("${ChatColor.YELLOW}添加新配方${args[1]}成功")
+
+        }
+
+        if (args[0] == "delete") {
+            if (!sender.hasPermission("RainyRecipe.delete")) {
+                return true
+            }
+
+        }
+        if (args[0] == "list") {
+            if (!sender.hasPermission("RainyRecipe.list")) {
+                return true
+            }
+
+        }
+
+
+
         return true
     }
 
+    /**
+     * 验证配方名称是否符合邀请
+     */
+    fun isValidKey(keyName: String): Boolean {
+        val regex = """^[a-zA-Z0-9._/-]+$""".toRegex()
+        return regex.matches(keyName)
+    }
 
+    /**
+     * 添加集合权限
+     */
     private fun addPermissionList(list: MutableList<String>, sender: CommandSender) {
-        Bukkit.getLogger().info("？？？？？？？？？")
+
         if (sender.hasPermission("RainyRecipe.add")) {
             list.add("add")
             Bukkit.getLogger().info("add")

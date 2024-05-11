@@ -15,9 +15,21 @@ object MaterialMap {
     fun getKeySet(inputKey: String): Set<String> {
         return biMap.keys.filter { it.startsWith(inputKey) }.toSet()
     }
+    /**
+     * 判断这个物品是否存在
+     */
+    fun existMaterial(item: String): Boolean {
 
-    fun getMaterial(key:String) : Material? {
-      return biMap[key]
+        return biMap[item] != null
+    }
+
+    fun getMaterial(key: String): Material {
+        var material = biMap[key]
+        if (material == null) {
+            return Material.AIR
+        }
+
+        return material
     }
 
     private fun setMap() {
@@ -390,7 +402,7 @@ object MaterialMap {
         biMap["花岗岩台阶"] = Material.GRANITE_SLAB
         biMap["花岗岩楼梯"] = Material.GRANITE_STAIRS
         biMap["花岗岩墙"] = Material.GRANITE_WALL
-     //   biMap["草"] = Material.SHORT_GRASS 我操你妈草呢
+        //   biMap["草"] = Material.SHORT_GRASS 我操你妈草呢
         biMap["草方块"] = Material.GRASS_BLOCK
         biMap["沙砾"] = Material.GRAVEL
         biMap["灰色旗帜"] = Material.GRAY_BANNER
@@ -1380,7 +1392,7 @@ object MaterialMap {
 
     private fun addMusicDisc() {
 
-        biMap["c418-11"] = Material.MUSIC_DISC_11
+        biMap["C418-11"] = Material.MUSIC_DISC_11
         biMap["C418-13"] = Material.MUSIC_DISC_13
         biMap["SamuelÅberg-5"] = Material.MUSIC_DISC_5
         biMap["C418-blocks"] = Material.MUSIC_DISC_BLOCKS

@@ -8,17 +8,17 @@ permissions:
     default: op
     children:
       - RainyRecipe.add
-      - RainyRecipe.delete
-      - RainyRecipe.list
+  #    - RainyRecipe.delete
+  #    - RainyRecipe.list
   RainyRecipe.add:
     description: 添加配方
     default: op
   RainyRecipe.delete:
     description: 删除配方
-    default: op
+    default: false
   RainyRecipe.list:
     description: 配方列表
-    default: true
+    default: false
 
 #注册插件需要用到的指令
 commands:
